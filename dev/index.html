@@ -7,16 +7,198 @@
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/lit/polyfill-support.js"></script>
     <script type="module" src="../toc-observer.js"></script>
+    <base href="/dev/">
+
     <style>
-      p {
-        border: solid 1px blue;
-        padding: 8px;
+      :root {
+        --base-gap: 16px;
+        --sticky-header-height: 30px;
+      }
+
+      :target {
+        scroll-margin-top: var(--sticky-header-height);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        height: 100vh;
+        max-height: -webkit-fill-available;
+      }
+
+      h1 {
+        margin: 0;
+      }
+
+      h2 {
+        margin: 4rem 0 1rem;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      header, main {
+        padding: var(--base-gap);
+      }
+
+      header {
+        position: sticky;
+        top: var(--sticky-header-height);
+      }
+
+      .article-wrapper {
+        display: grid;
+        grid-template-columns: minmax(0, 300px) 600px;
+        grid-template-areas: 'main toc';
+        gap: calc(var(--base-gap) * 2);
+      }
+
+      .toc {
+        display: block;
+        grid-area: toc;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+
+        grid-area: main;
+      }
+
+      aside.document-toc {
+        position: sticky;
+        top: 3rem;
+      }
+
+      h2 + p {
+        margin-bottom: 50px;
+      }
+
+      toc-observer ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      a {
+        display: block;
+        border-left: 2px solid #e0e0e0;
+        padding: calc(var(--base-gap) / 2) var(--base-gap);
+        color: #585858;
+      }
+
+      a[aria-current="true"] {  
+        border-left: 2px solid #9c27b0;
+      }
+
+      img {
+        max-width: 100%;
       }
     </style>
   </head>
   <body>
-    <toc-observer>
-      <p>This is child content</p>
-    </toc-observer>
+      <header>
+        <h1>Opossums</h1>
+      </header>
+
+      <div class="article-wrapper">
+        <main>
+          <h2 id="beschreibung">Beschreibung</h2>
+          <img src="./opossum_1.jpg" alt="Opossum auf einem Baum">
+          <p>
+            Opossums sind die größten Beutelratten. Sie erreichen eine
+            Körperlänge von 32 bis 50 Zentimeter (vergleichbar mit der
+            Hauskatze), dazu kommt ein ebenso langer, nackter Schwanz. Sie
+            können bis zu 5,5 Kilogramm wiegen. Ihr Fell ist weißlich bis grau
+            und am Kopf haben sie meist drei schwarze Streifen, einen über jedem
+            Auge und einen in der Mitte. Alle vier Füße haben fünf Zehen mit
+            Krallen außer der ersten Zehe der Hinterfüße, die daumenartig
+            entwickelt ist und den anderen Zehen gegenübergestellt werden kann.
+          </p>
+          <h2 id="lebensweise">Lebensweise</h2>
+          <p>
+            Für gewöhnlich leben Opossums in bewaldeten oder buschbewachsenen Gebieten. 
+            Allerdings sind sie Kulturfolger und kommen auch in Plantagen, Parks und 
+            Städten vor. Ihr Verbreitungsgebiet ist seit der Ankunft der Europäer in 
+            Nordamerika gewachsen. Opossums sind nachtaktive Einzelgänger. Anderen 
+            Artgenossen begegnen sie meistens aggressiv. Sie können gut schwimmen und
+            mit Hilfe ihres Greifschwanzes auch gut klettern. Trotzdem leben sie aber
+            meist auf dem Boden. Den Tag verbringen sie in Felsspalten, hohlen Bäumen,
+            in selbstgegrabenen Bauten oder in Nestern, die sie mit Gräsern und Blättern
+            auslegen. Opossums sind nicht dauerhaft reviergebunden. Sie bewohnen ein 
+            bestimmtes Gebiet nur für ein paar Monate, verteidigen es aber in dieser Zeit
+            hartnäckig gegen andere Opossums. Zu den natürlichen Feinden der Opossums 
+            zählen unter anderem Kojoten, Füchse, Eulen und große Greifvögel. Bei Gefahr 
+            stellen sich Opossums tot. Dieses Totstellen ist so auffällig, dass es in 
+            Amerika als „playing possum“ zur Redewendung wurde. Opossums sind immun 
+            gegen Schlangengifte und andere Gifte. Es wird daher geforscht, welche 
+            Abwehrstoffe das Opossum gegen Gifte entwickelt.
+            <img src="./opossum_2.jpg" alt="Opossum auf einem Stein">
+          </p>
+          <h2 id="nahrung">Nahrung</h2>
+          <p>
+            Opossums sind Allesfresser. Sie ernähren sich sowohl von Insekten,
+            kleinen Wirbeltieren und Aas als auch von pflanzlichem Material wie Früchten
+            und Körnern.
+          </p>
+          <h2 id="fortpflanzung">Fortpflanzung</h2>
+          <p>
+            Opossumweibchen haben einen gut entwickelten Beutel mit meist 13 Zitzen darin, 
+            die kreisförmig angeordnet sind. Nach zwölf- bis vierzehntägiger Tragzeit 
+            (eine der kürzesten aller Säugetiere) kommen rund 20 Jungtiere zur Welt. 
+            Die Neugeborenen sind einen Zentimeter lang und haben ein Gewicht von 0,13 Gramm. 
+            Nicht alle kommen im Beutel unter, die zu kurz Gekommenen verenden. Im Alter von 
+            zwei bis drei Monaten verlassen sie erstmals den Beutel. Wenn nicht mehr alle im 
+            Beutel Platz haben, reiten einige Jungtiere auf dem Rücken der Mutter. Mit drei 
+            bis vier Monaten sind sie selbständig und gegen Ende des ersten Lebensjahres werden 
+            Opossums geschlechtsreif. Meist trägt das Weibchen zwei Würfe im Jahr aus, 
+            vereinzelt können es auch einer oder drei sein.
+            Ihre Lebenserwartung beträgt in freier Wildbahn höchstens zwei bis drei Jahre, 
+            Exemplare in Gefangenschaft werden bis zu fünf Jahre alt.
+          </p>
+          <h2 id="opossumarten-und-verbreitung">Opossumarten und Verbreitung</h2>
+          <p>
+            Opossums sind die am weitesten verbreitete Gattung der Beutelratten und die einzige, 
+            die mit dem Nordopossum auch in Nordamerika vorkommt. 
+            Das Verbreitungsgebiet der Gattung erstreckt sich vom südlichen Kanada über die USA
+            bis ins mittlere Argentinien.
+            <ul>
+              <li>Das Nord- oder Virginia-Opossum (Didelphis virginiana) ist die wohl bekannteste Art. Sie ist vom südlichen Kanada bis Costa Rica verbreitet.</li>
+              <li>Das Südopossum (Didelphis marsupialis) ist vom südlichen Mexiko bis Bolivien verbreitet.</li>
+              <li>Das Guyana-Opossum (Didelphis imperfecta) ist im nördlichen Südamerika beheimatet.</li>
+              <li>Das Gemeine Weißohropossum (Didelphis albiventris) lebt im östlichen und zentralen Südamerika.</li>
+              <li>Das Großohropossum (Didelphis aurita) bewohnt das südöstliche Brasilien und das östliche Paraguay.</li>
+              <li>Das Anden-Weißohropossum (Didelphis pernigra) lebt in der Andenregion.</li>
+            </ul>
+
+            Opossums werden nicht nur im deutschsprachigen Raum oft mit dem in Australien vorkommenden 
+            und von dort nach Neuseeland eingeschleppten Possum verwechselt. Wahrscheinlich liegt es daran, 
+            dass in der Pelzbranche das Fell des Possums, auch Kusus, als „Australisch“, „Tasmanisch“ bzw. 
+            „Neuseeländisch Opossumfell“ bezeichnet wird.
+          </p>
+        </main>
+        <div class="toc">
+          <aside class="document-toc">
+            <section>
+              <header>In diesem Artikel</header>
+              
+              <toc-observer>
+                <ul slot="toc">
+                  <li><a href="#beschreibung"class="toc-link">Beschreibung</a></li>
+                  <li><a href="#lebensweise" class="toc-link">Lebensweise</a></li>
+                  <li><a href="#nahrung" class="toc-link">Nahrung</a></li>
+                  <li><a href="#fortpflanzung" class="toc-link">Fortpflanzung</a></li>
+                  <li><a href="#opossumarten-und-verbreitung" class="toc-link">Opossumarten und Verbreitung</a></li>
+                </ul>
+              </toc-observer>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

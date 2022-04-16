@@ -1,63 +1,108 @@
 /**
+ * <toc-observer> highlights the current heading in your
+ * table of contents
+ *
+ * Copyright © 2022 Tony Spegel
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 import {LitElement, html, css} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {
+  customElement,
+  property,
+  queryAssignedElements,
+} from 'lit/decorators.js';
+
+const tocIntersectionObserver = (
+  options?: IntersectionObserverInit,
+): IntersectionObserver => {
+  return new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      document
+        ?.querySelectorAll('.toc-link')
+        .forEach((tocLink) => tocLink.removeAttribute('aria-current'));
+
+      if (entry.isIntersecting) {
+        const {target} = entry;
+        console.log(entry.isIntersecting);
+        console.log(entry);
+        console.log(target.id);
+
+        document
+          ?.querySelector(`a[href='#${target.id}']`)
+          ?.setAttribute('aria-current', 'true');
+      }
+    });
+  }, options);
+};
 
 /**
- * An example element.
+ * Observes your TOC elements.
  *
- * @fires count-changed - Indicates when the count changes
  * @slot - This element has a slot
- * @csspart button - The button
  */
 @customElement('toc-observer')
 export class TocObserver extends LitElement {
   static override styles = css`
     :host {
       display: block;
-      border: solid 1px gray;
-      padding: 16px;
-      max-width: 800px;
+      --base-gap: 16px;
     }
   `;
 
-  /**
-   * The name to say "Hello" to.
-   */
-  @property()
-  name = 'World';
+  @property({type: String})
+  public rootElement = 'header';
 
-  /**
-   * The number of times the button has been clicked.
-   */
-  @property({type: Number})
-  count = 0;
+  @property({type: String})
+  public rootMargin = '30px';
+
+  @property({type: Array})
+  public threshold: number[] = [0.0, 1.0];
+
+  @queryAssignedElements({slot: 'toc', selector: 'ul'})
+  _tocList!: Array<HTMLUListElement>;
+
+  private observer: IntersectionObserver = tocIntersectionObserver({
+    root: this.ownerDocument.querySelector('body > header'),
+    threshold: this.threshold,
+  });
+
+  get _tocListItems(): HTMLAnchorElement[] {
+    let tocLinks: HTMLAnchorElement[] = [];
+    if (this._tocList?.length) {
+      tocLinks = Array.from(this._tocList[0].querySelectorAll('.toc-link'));
+    }
+
+    return tocLinks;
+  }
+
+  override firstUpdated(): void {
+    const tocListItems: HTMLAnchorElement[] = this._tocListItems;
+
+    const hashes: string = tocListItems
+      .map((tocListItem) => tocListItem.hash)
+      .toString();
+
+    const headings: NodeListOf<HTMLElement> =
+      this.ownerDocument?.querySelectorAll(hashes);
+
+    console.log(tocListItems);
+    console.log({hashes});
+
+    headings.forEach((item) => this.observer.observe(item));
+  }
+
+  override disconnectedCallback(): void {
+    this.observer.disconnect();
+  }
 
   override render() {
-    return html`
-      <h1>${this.sayHello(this.name)}!</h1>
-      <button @click=${this._onClick} part="button">
-        Click Count: ${this.count}
-      </button>
-      <slot></slot>
-    `;
-  }
-
-  private _onClick() {
-    this.count++;
-    this.dispatchEvent(new CustomEvent('count-changed'));
-  }
-
-  /**
-   * Formats a greeting
-   * @param name The name to say "Hello" to
-   */
-  sayHello(name: string): string {
-    return `Hello, ${name}`;
+    return html`<slot name="toc"></slot>`;
   }
 }
 
