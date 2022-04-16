@@ -3,7 +3,7 @@
 /test/
 custom-elements.json
 # top level source
-my-element.js
-my-element.js.map
-my-element.d.ts
-my-element.d.ts.map
+toc-observer.js
+toc-observer.js.map
+toc-observer.d.ts
+toc-observer.d.ts.map

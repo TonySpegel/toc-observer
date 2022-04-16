@@ -49,4 +49,4 @@ const V=(t,i)=>"method"===i.kind&&i.descriptor&&!("value"in i.descriptor)?{...i,
       padding: 16px;
       max-width: 800px;
     }
-  `,G([F()],Q.prototype,"name",void 0),G([F({type:Number})],Q.prototype,"count",void 0),Q=G([(t=>i=>"function"==typeof i?((t,i)=>(window.customElements.define(t,i),i))(t,i):((t,i)=>{const{kind:s,elements:e}=i;return{kind:s,elements:e,finisher(i){window.customElements.define(t,i)}}})(t,i))("my-element")],Q);export{Q as MyElement};
+  `,G([F()],Q.prototype,"name",void 0),G([F({type:Number})],Q.prototype,"count",void 0),Q=G([(t=>i=>"function"==typeof i?((t,i)=>(window.customElements.define(t,i),i))(t,i):((t,i)=>{const{kind:s,elements:e}=i;return{kind:s,elements:e,finisher(i){window.customElements.define(t,i)}}})(t,i))("toc-observer")],Q);export{Q as MyElement};
