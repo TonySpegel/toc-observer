@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {MyElement} from '../toc-observer.js';
+import {TocObserver} from '../toc-observer.js';
 
 import {fixture, assert} from '@open-wc/testing';
 import {html} from 'lit/static-html.js';
@@ -12,7 +12,7 @@ import {html} from 'lit/static-html.js';
 suite('toc-observer', () => {
   test('is defined', () => {
     const el = document.createElement('toc-observer');
-    assert.instanceOf(el, MyElement);
+    assert.instanceOf(el, TocObserver);
   });
 
   test('renders with default values', async () => {
@@ -40,7 +40,7 @@ suite('toc-observer', () => {
   });
 
   test('handles a click', async () => {
-    const el = (await fixture(html`<toc-observer></toc-observer>`)) as MyElement;
+    const el = (await fixture(html`<toc-observer></toc-observer>`)) as TocObserver;
     const button = el.shadowRoot!.querySelector('button')!;
     button.click();
     await el.updateComplete;
@@ -55,7 +55,7 @@ suite('toc-observer', () => {
   });
 
   test('styling applied', async () => {
-    const el = (await fixture(html`<toc-observer></toc-observer>`)) as MyElement;
+    const el = (await fixture(html`<toc-observer></toc-observer>`)) as TocObserver;
     await el.updateComplete;
     assert.equal(getComputedStyle(el).paddingTop, '16px');
   });
