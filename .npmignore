@@ -1,0 +1,21 @@
+node_modules/
+/lib/
+/test/
+/docs/
+/docs-src/
+/dev/
+/.vscode/
+web-dev-server.config.js
+web-test-runner.config.js
+
+.eleventy.cjs                
+.eslintignore                
+.eslintrc.json               
+.prettierrc.json  
+rollup.config.js
+
+# top level source
+toc-observer.js
+toc-observer.d.ts
+toc-observer.d.ts.map
+observer-test.ts
