@@ -1,6 +1,5 @@
 {
   "name": "toc-observer-component",
-  "private": true,
   "version": "0.0.0",
   "description": "Highlights links in a table of contents if observed items appear in your viewport",
   "main": "toc-observer.js",
