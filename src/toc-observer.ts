@@ -18,29 +18,6 @@ import {
   queryAssignedElements,
 } from 'lit/decorators.js';
 
-const tocIntersectionObserver = (
-  options?: IntersectionObserverInit,
-): IntersectionObserver => {
-  return new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry) => {
-      document
-        ?.querySelectorAll('.toc-link')
-        .forEach((tocLink) => tocLink.removeAttribute('aria-current'));
-
-      if (entry.isIntersecting) {
-        const {target} = entry;
-        console.log(entry.isIntersecting);
-        console.log(entry);
-        console.log(target.id);
-
-        document
-          ?.querySelector(`a[href='#${target.id}']`)
-          ?.setAttribute('aria-current', 'true');
-      }
-    });
-  }, options);
-};
-
 /**
  * Observes your TOC elements.
  *
@@ -56,26 +33,61 @@ export class TocObserver extends LitElement {
   `;
 
   @property({type: String})
-  public rootElement = 'header';
-
-  @property({type: String})
-  public rootMargin = '30px';
+  public rootElement = 'null';
 
   @property({type: Array})
   public threshold: number[] = [0.0, 1.0];
 
-  @queryAssignedElements({slot: 'toc', selector: 'ul'})
-  _tocList!: Array<HTMLUListElement>;
+  @property({type: String})
+  public tocLinkSelector = '.toc-link';
 
-  private observer: IntersectionObserver = tocIntersectionObserver({
-    root: this.ownerDocument.querySelector('body > header'),
-    threshold: this.threshold,
-  });
+  @property({type: String})
+  public tocActiveClass = 'toc-active';
+
+  @property({type: String})
+  public observerItemSelector = 'h2[id], h3[id]';
+
+  @queryAssignedElements({slot: 'toc', selector: 'ul'})
+  private _tocList!: Array<HTMLUListElement>;
+
+  private observerItems: NodeListOf<HTMLElement> =
+    this.ownerDocument?.querySelectorAll<HTMLElement>(
+      this.observerItemSelector,
+    );
+
+  private observer: IntersectionObserver = new IntersectionObserver(
+    (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        const {id} = entry.target;
+
+        if (entry.intersectionRatio > 0) {
+          this.selectTocLink(id)?.classList.add(this.tocActiveClass);
+        } else {
+          this.selectTocLink(id)?.classList.remove(this.tocActiveClass);
+        }
+      });
+    },
+    // IntersectionObserver options
+    {
+      root: this.ownerDocument.querySelector(this.rootElement),
+      threshold: this.threshold,
+    },
+  );
+
+  public selectTocLink(id: string): HTMLAnchorElement | null {
+    return (
+      this.ownerDocument?.querySelector<HTMLAnchorElement>(
+        `${this.tocLinkSelector}[href="#${id}"]`,
+      ) ?? null
+    );
+  }
 
   get _tocListItems(): HTMLAnchorElement[] {
     let tocLinks: HTMLAnchorElement[] = [];
     if (this._tocList?.length) {
-      tocLinks = Array.from(this._tocList[0].querySelectorAll('.toc-link'));
+      tocLinks = Array.from(
+        this._tocList[0].querySelectorAll(this.tocLinkSelector),
+      );
     }
 
     return tocLinks;
@@ -84,17 +96,25 @@ export class TocObserver extends LitElement {
   override firstUpdated(): void {
     const tocListItems: HTMLAnchorElement[] = this._tocListItems;
 
+    if (tocListItems.length === 0) {
+      console.log('empty');
+      const headings = this.observerItems;
+      console.log(headings);
+    }
+
+    console.log(tocListItems.length);
+
     const hashes: string = tocListItems
       .map((tocListItem) => tocListItem.hash)
       .toString();
 
-    const headings: NodeListOf<HTMLElement> =
-      this.ownerDocument?.querySelectorAll(hashes);
+    // const headings: NodeListOf<HTMLElement> =
+    //   this.ownerDocument?.querySelectorAll(hashes);
 
     console.log(tocListItems);
     console.log({hashes});
 
-    headings.forEach((item) => this.observer.observe(item));
+    this.observerItems.forEach((item) => this.observer.observe(item));
   }
 
   override disconnectedCallback(): void {
