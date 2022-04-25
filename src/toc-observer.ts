@@ -11,7 +11,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {LitElement, html, css} from 'lit';
+import {LitElement, html} from 'lit';
 import {
   customElement,
   property,
@@ -25,18 +25,11 @@ import {
  */
 @customElement('toc-observer')
 export class TocObserver extends LitElement {
-  static override styles = css`
-    :host {
-      display: block;
-      --base-gap: 16px;
-    }
-  `;
-
   @property({type: String})
   public rootElement = 'null';
 
   @property({type: Array})
-  public threshold: number[] = [0.0, 1.0];
+  public threshold: number[] = [0, 1];
 
   @property({type: String})
   public tocLinkSelector = '.toc-link';
@@ -50,16 +43,12 @@ export class TocObserver extends LitElement {
   @queryAssignedElements({slot: 'toc', selector: 'ul'})
   private _tocList!: Array<HTMLUListElement>;
 
-  private observerItems: NodeListOf<HTMLElement> =
-    this.ownerDocument?.querySelectorAll<HTMLElement>(
-      this.observerItemSelector,
-    );
-
   private observer: IntersectionObserver = new IntersectionObserver(
     (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
+        // Get the id of the intersecting item
         const {id} = entry.target;
-
+        // If any item intersects with our root add / remove a CSS class
         if (entry.intersectionRatio > 0) {
           this.selectTocLink(id)?.classList.add(this.tocActiveClass);
         } else {
@@ -73,48 +62,34 @@ export class TocObserver extends LitElement {
       threshold: this.threshold,
     },
   );
-
-  public selectTocLink(id: string): HTMLAnchorElement | null {
-    return (
-      this.ownerDocument?.querySelector<HTMLAnchorElement>(
-        `${this.tocLinkSelector}[href="#${id}"]`,
-      ) ?? null
+  /**
+   * Selects a TOC link within the components slot / ul element.
+   * Its id param is obtained by reading the oberver item's target-id.
+   */
+  private selectTocLink(id: string): HTMLAnchorElement | null {
+    return this._tocList[0].querySelector<HTMLAnchorElement>(
+      `${this.tocLinkSelector}[href="#${id}"]`,
     );
   }
 
-  get _tocListItems(): HTMLAnchorElement[] {
-    let tocLinks: HTMLAnchorElement[] = [];
-    if (this._tocList?.length) {
-      tocLinks = Array.from(
-        this._tocList[0].querySelectorAll(this.tocLinkSelector),
-      );
-    }
-
-    return tocLinks;
+  private get _tocListItems(): HTMLAnchorElement[] | null {
+    return this._tocList?.length
+      ? Array.from(
+          this._tocList[0].querySelectorAll<HTMLAnchorElement>(
+            this.tocLinkSelector,
+          ),
+        )
+      : null;
   }
 
   override firstUpdated(): void {
-    const tocListItems: HTMLAnchorElement[] = this._tocListItems;
+    const observerItems = this.ownerDocument?.querySelectorAll<HTMLElement>(
+      this.observerItemSelector,
+    );
 
-    if (tocListItems.length === 0) {
-      console.log('empty');
-      const headings = this.observerItems;
-      console.log(headings);
+    if (this._tocListItems?.length) {
+      observerItems?.forEach((item) => this.observer.observe(item));
     }
-
-    console.log(tocListItems.length);
-
-    const hashes: string = tocListItems
-      .map((tocListItem) => tocListItem.hash)
-      .toString();
-
-    // const headings: NodeListOf<HTMLElement> =
-    //   this.ownerDocument?.querySelectorAll(hashes);
-
-    console.log(tocListItems);
-    console.log({hashes});
-
-    this.observerItems.forEach((item) => this.observer.observe(item));
   }
 
   override disconnectedCallback(): void {

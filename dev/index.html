@@ -26,10 +26,6 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
       font-family: sans-serif;
       margin: 0;
@@ -91,6 +87,10 @@
       list-style-type: none;
     }
 
+    toc-observer a:has(+ ul li > .toc-active) {
+      border-left: 2px solid var(--toc-active);
+    }
+
     a {
       display: block;
       border-left: 2px solid #e0e0e0;
@@ -102,14 +102,11 @@
       border-left: 2px solid var(--toc-active);
     }
 
-
     img {
       max-width: 100%;
     }
 
-    a:has(+ ul li > .toc-active) {
-      border-left: 2px solid var(--toc-active);
-    }
+    
 
     h2:has(+ img) {
       color: red;

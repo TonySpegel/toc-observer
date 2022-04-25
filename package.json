@@ -1,11 +1,12 @@
 {
-  "name": "@lit/lit-starter-ts",
+  "name": "toc-observer-component",
   "private": true,
-  "version": "1.0.2",
-  "description": "A simple web component",
+  "version": "0.0.0",
+  "description": "Highlights links in a table of contents if observed items appear in your viewport",
   "main": "toc-observer.js",
   "module": "toc-observer.js",
   "type": "module",
+  "types": "*.d.ts",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
@@ -33,15 +34,18 @@
     "checksize": "rollup -c ; cat toc-observer.bundled.js | gzip -9 | wc -c ; rm toc-observer.bundled.js"
   },
   "keywords": [
-    "web-components",
+    "IntersectionObserver",
+    "lit",
     "lit-element",
+    "table of contents",
+    "toc",
     "typescript",
-    "lit"
+    "web-components"
   ],
-  "author": "Google LLC",
+  "author": "Tony Spegel",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "lit": "^2.1.0"
+    "lit": "^2.2.2"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
