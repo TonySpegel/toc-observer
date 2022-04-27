@@ -15,7 +15,15 @@
     :root {
       --base-gap: 16px;
       --sticky-header-height: 30px;
-      --toc-active: #9c27b0;
+
+      --purple-hue: 261deg;
+      --purple-sat: 64%;
+      --purple-light: 42%;
+
+      --primary-color: hsl(var(--purple-hue), var(--purple-sat), var(--purple-light));
+      --toc-color: #585858;
+      --toc-color-active: var(--primary-color);
+      --heading-color: hsl(var(--purple-hue), calc(var(--purple-sat) / 2), calc(var(--purple-light) / 1.5));
     }
 
     :target {
@@ -24,6 +32,14 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      line-height: 1.75;
+      margin: auto;
+      max-width: 75ch;
+      padding: 3em 1em;
+      font-size: 1.25rem;
     }
 
     body {
@@ -37,17 +53,18 @@
       margin: 0;
     }
 
-    h2 {
-      margin: 4rem 0 1rem;
+    h1,
+    h2,
+    h3 {
+      color: var(--heading-color);
     }
 
     a {
       text-decoration: none;
     }
 
-    header,
-    main {
-      padding: var(--base-gap);
+    header.site-header {
+      padding-bottom: var(--base-gap) 0;
     }
 
     header {
@@ -57,7 +74,7 @@
 
     .article-wrapper {
       display: grid;
-      grid-template-columns: minmax(0, 300px) 600px;
+      grid-template-columns: 1fr auto;
       grid-template-areas: 'main toc';
       gap: calc(var(--base-gap) * 2);
     }
@@ -74,193 +91,188 @@
       grid-area: main;
     }
 
-    aside.document-toc {
+    .document-toc {
       position: sticky;
       top: 3rem;
+      max-width: 250px;
     }
 
-    h2+p {
-      margin-bottom: 50px;
+    .document-toc header {
+      color: var(--heading-color);
     }
 
     toc-observer ul {
       list-style-type: none;
+      line-height: 1;
     }
 
-    toc-observer a:has(+ ul li > .toc-active) {
-      border-left: 2px solid var(--toc-active);
+    toc-observer ul[slot="toc"] {
+      padding: 0;
     }
 
-    a {
+    toc-observer a.toc-link {
       display: block;
       border-left: 2px solid #e0e0e0;
       padding: calc(var(--base-gap) / 2) var(--base-gap);
-      color: #585858;
+      color: var(--toc-color);
     }
 
-    .toc-active {
-      border-left: 2px solid var(--toc-active);
+    toc-observer a:has(+ ul li > .toc-active) {
+      border-left: 2px solid var(--toc-color-active);
+    }
+
+    toc-observer a.toc-active {
+      color: var(--toc-color-active);
+      border-left-color: var(--toc-color-active);
+    }
+
+    figure {
+      margin: 0;
     }
 
     img {
       max-width: 100%;
     }
-
-    
-
-    h2:has(+ img) {
-      color: red;
-    }
   </style>
 </head>
 
 <body>
-  <header>
+  <header class="site-header">
     <h1>Opossums</h1>
   </header>
 
   <div class="article-wrapper">
     <main>
-      <h2 id="beschreibung">Beschreibung</h2>
-      <img src="./opossum_1.jpg" alt="Opossum auf einem Baum">
-      <p>
-        Opossums sind die größten Beutelratten. Sie erreichen eine
-        Körperlänge von 32 bis 50 Zentimeter (vergleichbar mit der
-        Hauskatze), dazu kommt ein ebenso langer, nackter Schwanz. Sie
-        können bis zu 5,5 Kilogramm wiegen. Ihr Fell ist weißlich bis grau
-        und am Kopf haben sie meist drei schwarze Streifen, einen über jedem
-        Auge und einen in der Mitte. Alle vier Füße haben fünf Zehen mit
-        Krallen außer der ersten Zehe der Hinterfüße, die daumenartig
-        entwickelt ist und den anderen Zehen gegenübergestellt werden kann.
-      </p>
-      <h3 id="lebensweise">Lebensweise</h3>
-      <p>
-        Für gewöhnlich leben Opossums in bewaldeten oder buschbewachsenen Gebieten.
-        Allerdings sind sie Kulturfolger und kommen auch in Plantagen, Parks und
-        Städten vor. Ihr Verbreitungsgebiet ist seit der Ankunft der Europäer in
-        Nordamerika gewachsen. Opossums sind nachtaktive Einzelgänger. Anderen
-        Artgenossen begegnen sie meistens aggressiv. Sie können gut schwimmen und
-        mit Hilfe ihres Greifschwanzes auch gut klettern. Trotzdem leben sie aber
-        meist auf dem Boden. Den Tag verbringen sie in Felsspalten, hohlen Bäumen,
-        in selbstgegrabenen Bauten oder in Nestern, die sie mit Gräsern und Blättern
-        auslegen. Opossums sind nicht dauerhaft reviergebunden. Sie bewohnen ein
-        bestimmtes Gebiet nur für ein paar Monate, verteidigen es aber in dieser Zeit
-        hartnäckig gegen andere Opossums. Zu den natürlichen Feinden der Opossums
-        zählen unter anderem Kojoten, Füchse, Eulen und große Greifvögel. Bei Gefahr
-        stellen sich Opossums tot. Dieses Totstellen ist so auffällig, dass es in
-        Amerika als „playing possum“ zur Redewendung wurde. Opossums sind immun
-        gegen Schlangengifte und andere Gifte. Es wird daher geforscht, welche
-        Abwehrstoffe das Opossum gegen Gifte entwickelt.
+      <section id="beschreibung">
+        <h2>Beschreibung</h2>
+        <figure>
+          <img src="./opossum_1.jpg" alt="North American Opossum with white/grey winter coat.">
 
-        <!-- Für gewöhnlich leben Opossums in bewaldeten oder buschbewachsenen Gebieten.
-        Allerdings sind sie Kulturfolger und kommen auch in Plantagen, Parks und
-        Städten vor. Ihr Verbreitungsgebiet ist seit der Ankunft der Europäer in
-        Nordamerika gewachsen. Opossums sind nachtaktive Einzelgänger. Anderen
-        Artgenossen begegnen sie meistens aggressiv. Sie können gut schwimmen und
-        mit Hilfe ihres Greifschwanzes auch gut klettern. Trotzdem leben sie aber
-        meist auf dem Boden. Den Tag verbringen sie in Felsspalten, hohlen Bäumen,
-        in selbstgegrabenen Bauten oder in Nestern, die sie mit Gräsern und Blättern
-        auslegen. Opossums sind nicht dauerhaft reviergebunden. Sie bewohnen ein
-        bestimmtes Gebiet nur für ein paar Monate, verteidigen es aber in dieser Zeit
-        hartnäckig gegen andere Opossums. Zu den natürlichen Feinden der Opossums
-        zählen unter anderem Kojoten, Füchse, Eulen und große Greifvögel. Bei Gefahr
-        stellen sich Opossums tot. Dieses Totstellen ist so auffällig, dass es in
-        Amerika als „playing possum“ zur Redewendung wurde. Opossums sind immun
-        gegen Schlangengifte und andere Gifte. Es wird daher geforscht, welche
-        Abwehrstoffe das Opossum gegen Gifte entwickelt.
+          <figcaption>
+            North American Opossum with winter coat.
+            <footer>
+              <small>
+                <a href="https://en.wikipedia.org/wiki/User:Cody.pope" target="_blank" rel="noopener noreferrer">
+                  © Cody.pope (Wikipedia)
+                </a>
+              </small>
+            </footer>
+          </figcaption>
+        </figure>
+        <p>
+          Opossums sind die größten Beutelratten. Sie erreichen eine
+          Körperlänge von 32 bis 50 Zentimeter (vergleichbar mit der
+          Hauskatze), dazu kommt ein ebenso langer, nackter Schwanz. Sie
+          können bis zu 5,5 Kilogramm wiegen. Ihr Fell ist weißlich bis grau
+          und am Kopf haben sie meist drei schwarze Streifen, einen über jedem
+          Auge und einen in der Mitte. Alle vier Füße haben fünf Zehen mit
+          Krallen außer der ersten Zehe der Hinterfüße, die daumenartig
+          entwickelt ist und den anderen Zehen gegenübergestellt werden kann.
+        </p>
+      </section>
+      <section id="lebensweise">
+        <h3>Lebensweise</h3>
+        <p>
+          Für gewöhnlich leben Opossums in bewaldeten oder buschbewachsenen Gebieten.
+          Allerdings sind sie Kulturfolger und kommen auch in Plantagen, Parks und
+          Städten vor. Ihr Verbreitungsgebiet ist seit der Ankunft der Europäer in
+          Nordamerika gewachsen. Opossums sind nachtaktive Einzelgänger. Anderen
+          Artgenossen begegnen sie meistens aggressiv. Sie können gut schwimmen und
+          mit Hilfe ihres Greifschwanzes auch gut klettern. Trotzdem leben sie aber
+          meist auf dem Boden. Den Tag verbringen sie in Felsspalten, hohlen Bäumen,
+          in selbstgegrabenen Bauten oder in Nestern, die sie mit Gräsern und Blättern
+          auslegen. Opossums sind nicht dauerhaft reviergebunden. Sie bewohnen ein
+          bestimmtes Gebiet nur für ein paar Monate, verteidigen es aber in dieser Zeit
+          hartnäckig gegen andere Opossums. Zu den natürlichen Feinden der Opossums
+          zählen unter anderem Kojoten, Füchse, Eulen und große Greifvögel. Bei Gefahr
+          stellen sich Opossums tot. Dieses Totstellen ist so auffällig, dass es in
+          Amerika als „playing possum“ zur Redewendung wurde. Opossums sind immun
+          gegen Schlangengifte und andere Gifte. Es wird daher geforscht, welche
+          Abwehrstoffe das Opossum gegen Gifte entwickelt.
 
-        Für gewöhnlich leben Opossums in bewaldeten oder buschbewachsenen Gebieten.
-        Allerdings sind sie Kulturfolger und kommen auch in Plantagen, Parks und
-        Städten vor. Ihr Verbreitungsgebiet ist seit der Ankunft der Europäer in
-        Nordamerika gewachsen. Opossums sind nachtaktive Einzelgänger. Anderen
-        Artgenossen begegnen sie meistens aggressiv. Sie können gut schwimmen und
-        mit Hilfe ihres Greifschwanzes auch gut klettern. Trotzdem leben sie aber
-        meist auf dem Boden. Den Tag verbringen sie in Felsspalten, hohlen Bäumen,
-        in selbstgegrabenen Bauten oder in Nestern, die sie mit Gräsern und Blättern
-        auslegen. Opossums sind nicht dauerhaft reviergebunden. Sie bewohnen ein
-        bestimmtes Gebiet nur für ein paar Monate, verteidigen es aber in dieser Zeit
-        hartnäckig gegen andere Opossums. Zu den natürlichen Feinden der Opossums
-        zählen unter anderem Kojoten, Füchse, Eulen und große Greifvögel. Bei Gefahr
-        stellen sich Opossums tot. Dieses Totstellen ist so auffällig, dass es in
-        Amerika als „playing possum“ zur Redewendung wurde. Opossums sind immun
-        gegen Schlangengifte und andere Gifte. Es wird daher geforscht, welche
-        Abwehrstoffe das Opossum gegen Gifte entwickelt.
+        <figure>
+          <img src="./opossum_2.jpg" alt="Opossum sitting on a stone">
+          <figcaption>
+            Southern Opossum
+            <footer>
+              <small>
+                <a href="https://www.flickr.com/photos/17333088@N00/3455954131" target="_blank"
+                  rel="noopener noreferrer">
+                  © Juan Tello (Flickr)
+                </a>
+              </small>
+            </footer>
+          </figcaption>
+        </figure>
+        </p>
+      </section>
+      <section id="nahrung">
+        <h3>Nahrung</h3>
+        <p>
+          Opossums sind Allesfresser. Sie ernähren sich sowohl von Insekten,
+          kleinen Wirbeltieren und Aas als auch von pflanzlichem Material wie Früchten
+          und Körnern.
+        </p>
+      </section>
+      <section id="fortpflanzung">
+        <h3>Fortpflanzung</h3>
+        <p>
+          Opossumweibchen haben einen gut entwickelten Beutel mit meist 13 Zitzen darin,
+          die kreisförmig angeordnet sind. Nach zwölf- bis vierzehntägiger Tragzeit
+          (eine der kürzesten aller Säugetiere) kommen rund 20 Jungtiere zur Welt.
+          Die Neugeborenen sind einen Zentimeter lang und haben ein Gewicht von 0,13 Gramm.
+          Nicht alle kommen im Beutel unter, die zu kurz Gekommenen verenden. Im Alter von
+          zwei bis drei Monaten verlassen sie erstmals den Beutel. Wenn nicht mehr alle im
+          Beutel Platz haben, reiten einige Jungtiere auf dem Rücken der Mutter. Mit drei
+          bis vier Monaten sind sie selbständig und gegen Ende des ersten Lebensjahres werden
+          Opossums geschlechtsreif. Meist trägt das Weibchen zwei Würfe im Jahr aus,
+          vereinzelt können es auch einer oder drei sein.
+          Ihre Lebenserwartung beträgt in freier Wildbahn höchstens zwei bis drei Jahre,
+          Exemplare in Gefangenschaft werden bis zu fünf Jahre alt.
+        </p>
+      </section>
+      <section id="opossumarten-und-verbreitung">
+        <h2>Opossumarten und Verbreitung</h2>
+        <p>
+          Opossums sind die am weitesten verbreitete Gattung der Beutelratten und die einzige,
+          die mit dem Nordopossum auch in Nordamerika vorkommt.
+          Das Verbreitungsgebiet der Gattung erstreckt sich vom südlichen Kanada über die USA
+          bis ins mittlere Argentinien.
+        <ul>
+          <li>Das Nord- oder Virginia-Opossum (Didelphis virginiana) ist die wohl bekannteste Art. Sie ist vom südlichen
+            Kanada bis Costa Rica verbreitet.</li>
+          <li>Das Südopossum (Didelphis marsupialis) ist vom südlichen Mexiko bis Bolivien verbreitet.</li>
+          <li>Das Guyana-Opossum (Didelphis imperfecta) ist im nördlichen Südamerika beheimatet.</li>
+          <li>Das Gemeine Weißohropossum (Didelphis albiventris) lebt im östlichen und zentralen Südamerika.</li>
+          <li>Das Großohropossum (Didelphis aurita) bewohnt das südöstliche Brasilien und das östliche Paraguay.</li>
+          <li>Das Anden-Weißohropossum (Didelphis pernigra) lebt in der Andenregion.</li>
+        </ul>
 
-        Für gewöhnlich leben Opossums in bewaldeten oder buschbewachsenen Gebieten.
-        Allerdings sind sie Kulturfolger und kommen auch in Plantagen, Parks und
-        Städten vor. Ihr Verbreitungsgebiet ist seit der Ankunft der Europäer in
-        Nordamerika gewachsen. Opossums sind nachtaktive Einzelgänger. Anderen
-        Artgenossen begegnen sie meistens aggressiv. Sie können gut schwimmen und
-        mit Hilfe ihres Greifschwanzes auch gut klettern. Trotzdem leben sie aber
-        meist auf dem Boden. Den Tag verbringen sie in Felsspalten, hohlen Bäumen,
-        in selbstgegrabenen Bauten oder in Nestern, die sie mit Gräsern und Blättern
-        auslegen. Opossums sind nicht dauerhaft reviergebunden. Sie bewohnen ein
-        bestimmtes Gebiet nur für ein paar Monate, verteidigen es aber in dieser Zeit
-        hartnäckig gegen andere Opossums. Zu den natürlichen Feinden der Opossums
-        zählen unter anderem Kojoten, Füchse, Eulen und große Greifvögel. Bei Gefahr
-        stellen sich Opossums tot. Dieses Totstellen ist so auffällig, dass es in
-        Amerika als „playing possum“ zur Redewendung wurde. Opossums sind immun
-        gegen Schlangengifte und andere Gifte. Es wird daher geforscht, welche
-        Abwehrstoffe das Opossum gegen Gifte entwickelt. -->
-        <img src="./opossum_2.jpg" alt="Opossum auf einem Stein">
-      </p>
-      <h3 id="nahrung">Nahrung</h3>
-      <p>
-        Opossums sind Allesfresser. Sie ernähren sich sowohl von Insekten,
-        kleinen Wirbeltieren und Aas als auch von pflanzlichem Material wie Früchten
-        und Körnern.
-      </p>
-      <h3 id="fortpflanzung">Fortpflanzung</h3>
-      <p>
-        Opossumweibchen haben einen gut entwickelten Beutel mit meist 13 Zitzen darin,
-        die kreisförmig angeordnet sind. Nach zwölf- bis vierzehntägiger Tragzeit
-        (eine der kürzesten aller Säugetiere) kommen rund 20 Jungtiere zur Welt.
-        Die Neugeborenen sind einen Zentimeter lang und haben ein Gewicht von 0,13 Gramm.
-        Nicht alle kommen im Beutel unter, die zu kurz Gekommenen verenden. Im Alter von
-        zwei bis drei Monaten verlassen sie erstmals den Beutel. Wenn nicht mehr alle im
-        Beutel Platz haben, reiten einige Jungtiere auf dem Rücken der Mutter. Mit drei
-        bis vier Monaten sind sie selbständig und gegen Ende des ersten Lebensjahres werden
-        Opossums geschlechtsreif. Meist trägt das Weibchen zwei Würfe im Jahr aus,
-        vereinzelt können es auch einer oder drei sein.
-        Ihre Lebenserwartung beträgt in freier Wildbahn höchstens zwei bis drei Jahre,
-        Exemplare in Gefangenschaft werden bis zu fünf Jahre alt.
-      </p>
-      <h2 id="opossumarten-und-verbreitung">Opossumarten und Verbreitung</h2>
-      <p>
-        Opossums sind die am weitesten verbreitete Gattung der Beutelratten und die einzige,
-        die mit dem Nordopossum auch in Nordamerika vorkommt.
-        Das Verbreitungsgebiet der Gattung erstreckt sich vom südlichen Kanada über die USA
-        bis ins mittlere Argentinien.
-      <ul>
-        <li>Das Nord- oder Virginia-Opossum (Didelphis virginiana) ist die wohl bekannteste Art. Sie ist vom südlichen
-          Kanada bis Costa Rica verbreitet.</li>
-        <li>Das Südopossum (Didelphis marsupialis) ist vom südlichen Mexiko bis Bolivien verbreitet.</li>
-        <li>Das Guyana-Opossum (Didelphis imperfecta) ist im nördlichen Südamerika beheimatet.</li>
-        <li>Das Gemeine Weißohropossum (Didelphis albiventris) lebt im östlichen und zentralen Südamerika.</li>
-        <li>Das Großohropossum (Didelphis aurita) bewohnt das südöstliche Brasilien und das östliche Paraguay.</li>
-        <li>Das Anden-Weißohropossum (Didelphis pernigra) lebt in der Andenregion.</li>
-      </ul>
-
-      Opossums werden nicht nur im deutschsprachigen Raum oft mit dem in Australien vorkommenden
-      und von dort nach Neuseeland eingeschleppten Possum verwechselt. Wahrscheinlich liegt es daran,
-      dass in der Pelzbranche das Fell des Possums, auch Kusus, als „Australisch“, „Tasmanisch“ bzw.
-      „Neuseeländisch Opossumfell“ bezeichnet wird.
-      </p>
-      <h2 id="mensch-und-opossum">Mensch und Opossum</h2>
-      <p>
-        Als Kulturfolger profitieren Opossums mehr von der Anwesenheit des Menschen als viele andere Tiere. Sie finden
-        Nahrung in Mülleimern und auf Plantagen
-        und es wird ihnen nachgesagt, dass sie manchmal Geflügel reißen, weswegen sie teilweise als Plage angesehen und
-        gejagt werden. Eine weitere Gefahrenquelle
-        für Opossums stellt der Straßenverkehr dar.
-        Opossums wurden wegen ihres Fleisches gejagt, auch als Labortiere werden sie verwendet. Das Opossumfell wird als
-        Pelz genutzt.
-        Im 19. Jahrhundert begannen Farmer in den Vereinigten Staaten sogar, Opossums zu züchten.
-        Generell kommen diese Tiere häufig vor und keine der Arten ist laut IUCN gefährdet.
-        Eine breite mediale Aufmerksamkeit in Deutschland erfuhr 2008 das schielende Opossumweibchen Heidi. Beachtung
-        fand auch das Opossum Ratatouille,
-        das in einem Werbefilm aus dem Jahr 2012 eines US-amerikanischen Skigebiets Snowboard fährt.[3]
-      </p>
+        Opossums werden nicht nur im deutschsprachigen Raum oft mit dem in Australien vorkommenden
+        und von dort nach Neuseeland eingeschleppten Possum verwechselt. Wahrscheinlich liegt es daran,
+        dass in der Pelzbranche das Fell des Possums, auch Kusus, als „Australisch“, „Tasmanisch“ bzw.
+        „Neuseeländisch Opossumfell“ bezeichnet wird.
+        </p>
+      </section>
+      <section id="mensch-und-opossum">
+        <h2>Mensch und Opossum</h2>
+        <p>
+          Als Kulturfolger profitieren Opossums mehr von der Anwesenheit des Menschen als viele andere Tiere. Sie finden
+          Nahrung in Mülleimern und auf Plantagen
+          und es wird ihnen nachgesagt, dass sie manchmal Geflügel reißen, weswegen sie teilweise als Plage angesehen
+          und
+          gejagt werden. Eine weitere Gefahrenquelle
+          für Opossums stellt der Straßenverkehr dar.
+          Opossums wurden wegen ihres Fleisches gejagt, auch als Labortiere werden sie verwendet. Das Opossumfell wird
+          als
+          Pelz genutzt.
+          Im 19. Jahrhundert begannen Farmer in den Vereinigten Staaten sogar, Opossums zu züchten.
+          Generell kommen diese Tiere häufig vor und keine der Arten ist laut IUCN gefährdet.
+          Eine breite mediale Aufmerksamkeit in Deutschland erfuhr 2008 das schielende Opossumweibchen Heidi. Beachtung
+          fand auch das Opossum Ratatouille,
+          das in einem Werbefilm aus dem Jahr 2012 eines US-amerikanischen Skigebiets Snowboard fährt.[3]
+        </p>
+      </section>
       <h3>no id</h3>
     </main>
     <div class="toc">
