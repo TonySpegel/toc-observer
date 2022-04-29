@@ -11,11 +11,10 @@ import {
   queryAssignedElements,
 } from 'lit/decorators.js';
 
-
 /**
- * <toc-observer> highlights elements in a table of contents 
+ * <toc-observer> highlights elements in a table of contents
  * if their counterparts are visible in the viewport.
- * 
+ *
  * @slot - This element has a slot
  *
  * Copyright © 2022 Tony Spegel
@@ -25,23 +24,23 @@ export class TocObserver extends LitElement {
   // Converts '_tocList' into a getter that returns the assignedElements of the given slot
   @queryAssignedElements({slot: 'toc', selector: 'ul'})
   private _tocList?: Array<HTMLUListElement>;
-  
-  // Identifies the element or document as a reference for interecting items
-  @property({type: String})
-  public rootElement?: string;
-  
+
   // Selector for links within '_tocList'
   @property({type: String})
   public tocLinkSelector = '.toc-link';
-  
+
   // CSS class which is set when observer items are visible
   @property({type: String})
   public tocActiveClass = 'toc-active';
-  
+
+  // Identifies the element or document as a reference for interecting items
+  @property({type: String})
+  public rootElement?: string;
+
   // Selector for items which will be observed (should be something with an id).
   @property({type: String})
   public observerItemSelector = 'section[id]';
-  
+
   // Observes any items within your specified 'rootElement' and adds/removes a CSS class
   private observer: IntersectionObserver = new IntersectionObserver(
     (entries: IntersectionObserverEntry[]) => {
