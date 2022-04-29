@@ -1,10 +1,54 @@
-# LitElement TypeScript starter
+# `<toc-observer>` 
+
+## About
 
 This project includes a sample component using LitElement with TypeScript.
 
 This template is generated from the `lit-starter-ts` package in [the main Lit
 repo](https://github.com/lit/lit). Issues and PRs for this template should be
 filed in that repo.
+
+## Usage
+```html
+<!-- toc-observer with custom attributes -->
+<toc-observer 
+  tocLinkSelector=".toc-item"
+  tocActiveClass="toc-item--active"
+  observerItemSelector="[id]"
+>
+  <!-- this ul-tag and its slot name is mandatory -->
+  <ul slot="toc">
+    <li>
+      <a href="#characteristics" class="toc-item">Characteristics</a>
+      <ul>
+        <li><a href="#diet" class="toc-item">Diet</a></li>
+        <li><a href="#reproduction" class="toc-item">Reproduction</a></li>
+      </ul>
+    </li>
+  </ul>
+</toc-observer>
+
+<!-- Content -->
+<section id="characteristics">
+    <h2>Characteristics</h2>
+    <p>Opossum are immune to rabies (...)</p>
+</section>
+
+<section id="diet">
+    <h3>Diet</h3>
+</section>
+
+<section id="reproduction">
+    <h3>Reproduction</h3>
+</section>
+```
+## Attributes
+| Name                   | Required | Default       | Description                                                                                                    |
+|------------------------|----------|---------------|----------------------------------------------------------------------------------------------------------------|
+| `tocLinkSelector`      | No       | `.toc-link`   | CSS selector for items within your TOC                                                                         |
+| `tocActiveClass`       | No       | `toc-active`  | CSS class which is added to / removed from `tocLinkSelector`                                                   |
+| `rootElement`          | No       | `null`        | The intersection for your TOC items.                                                                           |
+| `observerItemSelector` | No       | `section[id]` | Items in your DOM which you'd like to observe.<br>Can be anything with an id `<section id="first"></section>`. |
 
 ## Setup
 
