@@ -39,7 +39,13 @@ export class TocObserver extends LitElement {
 
   // Selector for items which will be observed (should be something with an id).
   @property({type: String})
-  public observerItemSelector = 'section[id]';
+  public observerItemSelector = '[id]';
+
+  @property({type: Boolean})
+  public watchParent = true;
+
+  @property({type: String})
+  public parentSelector = 'section';
 
   // Observes any items within your specified 'rootElement' and adds/removes a CSS class
   private observer: IntersectionObserver = new IntersectionObserver(
@@ -92,9 +98,62 @@ export class TocObserver extends LitElement {
     const observerItems = this.ownerDocument?.querySelectorAll<HTMLElement>(
       this.observerItemSelector,
     );
+
+    let sectionHeadingMap = new Map<HTMLElement, HTMLElement>();
+
+    Array.from(observerItems).forEach((heading: HTMLElement) => {
+      if (heading.closest('section') !== null) {
+        const closestSection = heading.closest<HTMLElement>(
+          this.parentSelector,
+        )!;
+        
+        sectionHeadingMap.set(closestSection, heading);
+        return heading.closest('section');
+      }
+      return heading;
+    });
+
     // Observe items when at least one is available
     if (this._tocListItems?.length) {
-      observerItems?.forEach((item) => this.observer.observe(item));
+      // observerItems?.forEach((item) => this.observer.observe(item));
+      console.log('gibts');
+    }
+
+    if (this.watchParent) {
+      let map: Map<HTMLElement, HTMLElement> = new Map(
+        Array.from(observerItems).map((item: HTMLElement) => [
+          item.closest(this.parentSelector)!,
+          item,
+        ]),
+      );
+
+      console.log(map);
+
+      console.log(map);
+
+      map.forEach((_value, key) => {
+        // console.log(key);
+
+        new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+          entries.forEach((entry) => {
+            // console.log(value);
+            // console.log(key.id);
+
+            const {id} = map.get(key)!;
+            console.log(id);
+
+            if (entry.intersectionRatio > 0) {
+              console.log('add');
+              // console.log(entry.target);
+              this.selectTocLink(id)?.classList.add(this.tocActiveClass);
+            } else {
+              console.log('remove');
+              // console.log(entry.target);
+              this.selectTocLink(id)?.classList.remove(this.tocActiveClass);
+            }
+          });
+        }).observe(key);
+      });
     }
   }
   /**
