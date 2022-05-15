@@ -22,12 +22,8 @@ import {
 @customElement('toc-observer')
 export class TocObserver extends LitElement {
   // Converts '_tocList' into a getter that returns the assignedElements of the given slot
-  @queryAssignedElements({slot: 'toc', selector: 'ul'})
+  @queryAssignedElements({slot: 'toc'})
   private _tocList?: Array<HTMLUListElement>;
-
-  // Selector for links within '_tocList'
-  @property({type: String})
-  public tocLinkSelector = '.toc-link';
 
   // CSS class which is set when observer items are visible
   @property({type: String})
@@ -37,44 +33,45 @@ export class TocObserver extends LitElement {
   @property({type: String})
   public rootElement?: string;
 
-  // Selector for items which will be observed (should be something with an id).
-  @property({type: String})
-  public observerItemSelector = '[id]';
-
+  /**
+   * Useful for observing nested markup like this:
+   * <section>
+   *   <!-- ^observe -->
+   *   <h2 id="possum">Possum</h2>
+   * </section>
+   *
+   * Observing wrapper elements instead of just headings
+   * has the advantage that those have more area to intersect with.
+   *
+   *     ┌─────────┐
+   *     │ #possum │
+   *   ┌─┼─────────┼─┐
+   *   │ │         │ │
+   *   │ └─────────┘ │< Viewport
+   *   │ ^section    │
+   *   │             │
+   *   └─────────────┘
+   *
+   */
   @property({type: Boolean})
-  public watchParent = true;
+  public observeParent = false;
 
+  // Should be used together with observeParent
   @property({type: String})
   public parentSelector = 'section';
 
-  // Observes any items within your specified 'rootElement' and adds/removes a CSS class
-  private observer: IntersectionObserver = new IntersectionObserver(
-    (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        // Get the id of the intersecting item
-        const {id} = entry.target;
-        // If any item intersects with our root add / remove a CSS class
-        if (entry.intersectionRatio > 0) {
-          this.selectTocLink(id)?.classList.add(this.tocActiveClass);
-        } else {
-          this.selectTocLink(id)?.classList.remove(this.tocActiveClass);
-        }
-      });
-    },
-    // IntersectionObserver options
-    {
-      root: this.ownerDocument.querySelector(this.rootElement!) || null,
-    },
-  );
+  // anchor-IDs and their corresponding IntersectionObservers
+  private anchorHashObserverMap!: Map<
+    HTMLAnchorElement['hash'],
+    IntersectionObserver
+  >;
   /**
    * Selects a TOC link within the components slot / ul element.
    * Its id param is obtained by reading the oberver item's target-id.
    */
   private selectTocLink(id: string): HTMLAnchorElement | null {
     return this._tocList?.length
-      ? this._tocList[0].querySelector<HTMLAnchorElement>(
-          `${this.tocLinkSelector}[href="#${id}"]`,
-        )
+      ? this._tocList[0].querySelector<HTMLAnchorElement>(`[href="${id}"]`)
       : null;
   }
   /**
@@ -82,12 +79,47 @@ export class TocObserver extends LitElement {
    */
   private get _tocListItems(): HTMLAnchorElement[] | null {
     return this._tocList?.length
-      ? Array.from(
-          this._tocList[0].querySelectorAll<HTMLAnchorElement>(
-            this.tocLinkSelector,
-          ),
-        )
+      ? [...this._tocList[0].querySelectorAll<HTMLAnchorElement>('[href]')]
       : null;
+  }
+  /**
+   * Creates a map of anchor-IDs and their corresponding
+   * IntersectionObservers. Anchor-IDs are used to select
+   * toc-links within '_tocList' and also to create observer
+   * items later.
+   *
+   * {"#beschreibung" => IntersectionObserver}
+   * {"#lebensweise" => IntersectionObserver}
+   */
+  private createIdObserverMap(
+    anchors: HTMLAnchorElement[],
+  ): Map<HTMLAnchorElement['hash'], IntersectionObserver> {
+    return new Map(
+      anchors.map((anchor: HTMLAnchorElement) => {
+        const {hash} = anchor;
+
+        return [
+          hash,
+          new IntersectionObserver(
+            (entries: IntersectionObserverEntry[]) => {
+              entries.forEach((entry) => {
+                if (entry.intersectionRatio > 0) {
+                  this.selectTocLink(hash)?.classList.add(this.tocActiveClass);
+                } else {
+                  this.selectTocLink(hash)?.classList.remove(
+                    this.tocActiveClass,
+                  );
+                }
+              });
+            },
+            // IntersectionObserver options
+            {
+              root: this.ownerDocument.querySelector(this.rootElement!) || null,
+            },
+          ),
+        ];
+      }),
+    );
   }
   /**
    * The 'firstUpdated' lifecycle is called after the component's DOM
@@ -95,64 +127,19 @@ export class TocObserver extends LitElement {
    * Only then an element's slot content (our toc items) is available and can be observed.
    */
   override firstUpdated(): void {
-    const observerItems = this.ownerDocument?.querySelectorAll<HTMLElement>(
-      this.observerItemSelector,
-    );
-
-    let sectionHeadingMap = new Map<HTMLElement, HTMLElement>();
-
-    Array.from(observerItems).forEach((heading: HTMLElement) => {
-      if (heading.closest('section') !== null) {
-        const closestSection = heading.closest<HTMLElement>(
-          this.parentSelector,
-        )!;
-        
-        sectionHeadingMap.set(closestSection, heading);
-        return heading.closest('section');
-      }
-      return heading;
-    });
 
     // Observe items when at least one is available
     if (this._tocListItems?.length) {
-      // observerItems?.forEach((item) => this.observer.observe(item));
-      console.log('gibts');
-    }
+      this.anchorHashObserverMap = this.createIdObserverMap(this._tocListItems);
 
-    if (this.watchParent) {
-      let map: Map<HTMLElement, HTMLElement> = new Map(
-        Array.from(observerItems).map((item: HTMLElement) => [
-          item.closest(this.parentSelector)!,
-          item,
-        ]),
-      );
+      this.anchorHashObserverMap.forEach((observer, anchorHash) => {
+        const item = this.ownerDocument?.querySelector(anchorHash);
+        const observerItem =
+          this.observeParent === false
+            ? item!
+            : item?.closest(this.parentSelector)!;
 
-      console.log(map);
-
-      console.log(map);
-
-      map.forEach((_value, key) => {
-        // console.log(key);
-
-        new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
-          entries.forEach((entry) => {
-            // console.log(value);
-            // console.log(key.id);
-
-            const {id} = map.get(key)!;
-            console.log(id);
-
-            if (entry.intersectionRatio > 0) {
-              console.log('add');
-              // console.log(entry.target);
-              this.selectTocLink(id)?.classList.add(this.tocActiveClass);
-            } else {
-              console.log('remove');
-              // console.log(entry.target);
-              this.selectTocLink(id)?.classList.remove(this.tocActiveClass);
-            }
-          });
-        }).observe(key);
+        observer.observe(observerItem!);
       });
     }
   }
@@ -160,7 +147,9 @@ export class TocObserver extends LitElement {
    * Stop observing when the component is removed from the DOM
    */
   override disconnectedCallback(): void {
-    this.observer.disconnect();
+    // As there are no toc-items left to highlight observing
+    // elements should be stopped
+    this.anchorHashObserverMap.forEach((obs) => obs.disconnect());
   }
 
   override render() {
