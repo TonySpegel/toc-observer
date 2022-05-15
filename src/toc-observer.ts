@@ -49,9 +49,7 @@ export class TocObserver extends LitElement {
    *   │ │         │ │
    *   │ └─────────┘ │< Viewport
    *   │ ^section    │
-   *   │             │
    *   └─────────────┘
-   *
    */
   @property({type: Boolean})
   public observeParent = false;
