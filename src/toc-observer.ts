@@ -20,7 +20,7 @@ import {
  * Copyright © 2022 Tony Spegel
  */
 @customElement('toc-observer')
-export class TocObserver extends LitElement {  
+export class TocObserver extends LitElement {
   // CSS class which is set when observer items are visible
   @property({type: String})
   public tocActiveClass = 'toc-active';
@@ -28,6 +28,10 @@ export class TocObserver extends LitElement {
   // Identifies the element or document as a reference for interecting items
   @property({type: String})
   public rootElement?: string;
+
+  // Bounding box which determines when an observation is triggered
+  @property({type: String})
+  public rootMargin: string = '0px';
 
   /**
    * Useful for observing nested markup like this:
@@ -52,7 +56,7 @@ export class TocObserver extends LitElement {
 
   // Should be used together with observeParent
   @property({type: String})
-  public parentSelector = 'div';
+  public parentSelector = 'section';
 
   // Converts '_tocList' into a getter that returns the assignedElements of the given slot
   @queryAssignedElements({slot: 'toc'})
@@ -113,6 +117,7 @@ export class TocObserver extends LitElement {
             // IntersectionObserver options
             {
               root: this.ownerDocument.querySelector(this.rootElement!) || null,
+              rootMargin: this.rootMargin,
             },
           ),
         ];
@@ -131,14 +136,16 @@ export class TocObserver extends LitElement {
 
       this.anchorHashObserverMap.forEach((observer, anchorHash) => {
         const item = this.ownerDocument.querySelector(anchorHash);
-        
-        if (item !== null) {
-          const observerItem =
-            this.observeParent === false
-              ? item
-              : item.closest(this.parentSelector)!;
 
-          observer.observe(observerItem);
+        if (this.observeParent === false && item) {
+          observer.observe(item);
+        }
+
+        if (
+          this.observeParent === true &&
+          item?.closest(this.parentSelector) !== null
+        ) {
+          observer.observe(item?.closest(this.parentSelector)!);
         }
       });
     }
