@@ -76,12 +76,13 @@ Most blogs or documentation pages are based on the following markup so that only
 The idea of using sections or parent elements as a reference of observable items stems from this [post](https://www.bram.us/2020/01/10/smooth-scrolling-sticky-scrollspy-navigation/) by Bramus Van Damme - which I think is what you want from such a component.
 
 ## Attributes
-| Name                   | Required                   | Default       | Description                                           |
-|------------------------|----------------------------|---------------|-------------------------------------------------------|
-| `tocActiveClass`       | No                         | `toc-active`  | CSS class which is added to / removed from a TOC link |
-| `rootElement`          | No                         | `null`        | The intersection for your TOC items.                  |
-| `observeParent`        | If `parentSelector` is set | `false`       | Useful to watch intersecting wrapper elements         |
-| `parentSelector`       | No                         | `section`     | Specifiy the wrapper element that should be selected  |
+| Name                   | Required                   | Default          | Description                                           |
+|------------------------|----------------------------|------------------|-------------------------------------------------------|
+| `tocActiveClass`       | No                         | `toc-active`     | CSS class which is added to / removed from a TOC link |
+| `rootElement`          | No                         | `null`           | The intersection element for your content.            |
+| `rootMargin`           | No                         | `0px`            | Bounding box inside `rootElement`                     |
+| `observeParent`        | If `parentSelector` is set | `false`          | Useful to watch intersecting wrapper elements         |
+| `parentSelector`       | No                         | `section`        | Specifiy the wrapper element that should be selected  |
 
 ## Setup
 
