@@ -1,0 +1,133 @@
+:root {
+  --base-gap: 16px;
+  --sticky-header-height: 30px;
+
+  --purple-hue: 261deg;
+  --purple-sat: 64%;
+  --purple-light: 42%;
+
+  --primary-color: hsl(
+    var(--purple-hue),
+    var(--purple-sat),
+    var(--purple-light)
+  );
+  --toc-color: #585858;
+  --toc-color-active: var(--primary-color);
+  --heading-color: hsl(
+    var(--purple-hue),
+    calc(var(--purple-sat) / 2),
+    calc(var(--purple-light) / 1.5)
+  );
+}
+
+:target {
+  scroll-margin-top: var(--sticky-header-height);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  line-height: 1.75;
+  margin: auto;
+  max-width: 75ch;
+  padding: 3em 1em;
+  font-size: 1.25rem;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  height: 100vh;
+  max-height: -webkit-fill-available;
+}
+
+h1 {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--heading-color);
+}
+
+a {
+  text-decoration: none;
+}
+
+header.site-header {
+  padding-bottom: var(--base-gap) 0;
+}
+
+header {
+  position: sticky;
+  top: var(--sticky-header-height);
+}
+
+.article-wrapper {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'main toc';
+  gap: calc(var(--base-gap) * 2);
+}
+
+.toc {
+  display: block;
+  grid-area: toc;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+
+  grid-area: main;
+}
+
+.document-toc {
+  position: sticky;
+  top: 3rem;
+  max-width: 250px;
+}
+
+.document-toc header {
+  color: var(--heading-color);
+}
+
+toc-observer ul {
+  list-style-type: none;
+  line-height: 1;
+}
+
+toc-observer ul[slot='toc'] {
+  padding: 0;
+}
+
+toc-observer a.toc-link {
+  display: block;
+  border-left: 2px solid #e0e0e0;
+  padding: calc(var(--base-gap) / 2) var(--base-gap);
+  color: var(--toc-color);
+}
+
+toc-observer a:has(+ ul li > .toc-active) {
+  border-left: 2px solid var(--toc-color-active);
+}
+
+toc-observer a {
+  transition: all 100ms ease-in-out;
+}
+
+toc-observer a.toc-active {
+  color: var(--toc-color-active);
+  border-left-color: var(--toc-color-active);
+}
+
+figure {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}

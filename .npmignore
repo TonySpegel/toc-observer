@@ -18,4 +18,3 @@ rollup.config.js
 toc-observer.js
 toc-observer.d.ts
 toc-observer.d.ts.map
-observer-test.ts

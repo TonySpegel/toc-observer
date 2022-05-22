@@ -1,6 +1,9 @@
-# `<toc-observer>` 
+# `<toc-observer>` highlight table of content links
 
 ## About
+
+This web component highlights links which 
+
 
 This project includes a sample component using LitElement with TypeScript.
 
@@ -10,16 +13,12 @@ filed in that repo.
 
 ## Usage
 ```html
-<!-- toc-observer with custom attributes -->
-<toc-observer 
-  tocLinkSelector=".toc-item"
-  tocActiveClass="toc-item--active"
-  observerItemSelector="[id]"
->
-  <!-- this ul-tag and its slot name is mandatory -->
+<toc-observer>
+  <!-- Slot and its name is mandatory -->
   <ul slot="toc">
     <li>
-      <a href="#characteristics" class="toc-item">Characteristics</a>
+      <!-- Links have to begin with a hash ('#') -->
+      <a href="#possums" class="toc-item">Possums</a>
       <ul>
         <li><a href="#diet" class="toc-item">Diet</a></li>
         <li><a href="#reproduction" class="toc-item">Reproduction</a></li>
@@ -27,28 +26,31 @@ filed in that repo.
     </li>
   </ul>
 </toc-observer>
+```
+### Observing parent elements
 
+```html
 <!-- Content -->
-<section id="characteristics">
-    <h2>Characteristics</h2>
-    <p>Opossum are immune to rabies (...)</p>
+<section>
+  <h2 id="characteristics">Characteristics</h2>
+  <p>Opossum are immune to rabies (...)</p>
 </section>
 
-<section id="diet">
-    <h3>Diet</h3>
+<section>
+  <h3 id="diet">Diet</h3>
 </section>
 
-<section id="reproduction">
-    <h3>Reproduction</h3>
+<section>
+  <h3 id="reproduction">Reproduction</h3>
 </section>
 ```
 ## Attributes
-| Name                   | Required | Default       | Description                                                                                                    |
-|------------------------|----------|---------------|----------------------------------------------------------------------------------------------------------------|
-| `tocLinkSelector`      | No       | `.toc-link`   | CSS selector for items within your TOC                                                                         |
-| `tocActiveClass`       | No       | `toc-active`  | CSS class which is added to / removed from `tocLinkSelector`                                                   |
-| `rootElement`          | No       | `null`        | The intersection for your TOC items.                                                                           |
-| `observerItemSelector` | No       | `section[id]` | Items in your DOM which you'd like to observe.<br>Can be anything with an id `<section id="first"></section>`. |
+| Name                   | Required                   | Default       | Description                                           |
+|------------------------|----------------------------|---------------|-------------------------------------------------------|
+| `tocActiveClass`       | No (well kind of)          | `toc-active`  | CSS class which is added to / removed from a TOC link |
+| `rootElement`          | No                         | `null`        | The intersection for your TOC items.                  |
+| `observeParent`        | If `parentSelector` is set | `false`       | Useful to watch intersecting wrapper elements         |
+| `parentSelector`       | No                         | `section`     | Specifiy the wrapper element that should be selected  |
 
 ## Setup
 

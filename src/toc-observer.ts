@@ -77,7 +77,7 @@ export class TocObserver extends LitElement {
    */
   private get _tocListItems(): HTMLAnchorElement[] | null {
     return this._tocList?.length
-      ? [...this._tocList[0].querySelectorAll<HTMLAnchorElement>('[href]')]
+      ? [...this._tocList[0].querySelectorAll<HTMLAnchorElement>('[href^="#"]')]
       : null;
   }
   /**
@@ -125,19 +125,21 @@ export class TocObserver extends LitElement {
    * Only then an element's slot content (our toc items) is available and can be observed.
    */
   override firstUpdated(): void {
-
     // Observe items when at least one is available
     if (this._tocListItems?.length) {
       this.anchorHashObserverMap = this.createIdObserverMap(this._tocListItems);
 
       this.anchorHashObserverMap.forEach((observer, anchorHash) => {
-        const item = this.ownerDocument?.querySelector(anchorHash);
-        const observerItem =
-          this.observeParent === false
-            ? item!
-            : item?.closest(this.parentSelector)!;
+        const item = this.ownerDocument.querySelector(anchorHash);
+        
+        if (item !== null) {
+          const observerItem =
+            this.observeParent === false
+              ? item
+              : item.closest(this.parentSelector)!;
 
-        observer.observe(observerItem!);
+          observer.observe(observerItem);
+        }
       });
     }
   }
