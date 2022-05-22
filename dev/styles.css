@@ -124,7 +124,7 @@ toc-observer a.toc-active {
   border-left-color: var(--toc-color-active);
 }
 
-section[id] {
+section[id], main > section {
   background-color: #8a2be21c;
   padding: 0 var(--base-gap);
   border-radius: var(--base-gap);
