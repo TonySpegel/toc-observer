@@ -1,23 +1,30 @@
-# `<toc-observer>` highlight table of content links
+# `<toc-observer>` highlight links in a table of contents
 
 ## About
 
-This web component highlights links which 
+A table of contents (**TOC**) is a 
+list of chapters, section titles and similiar.
+On a website, a blog, these are usually links to the 
+corresponding sections. This web component takes any 
+HTML and tries to highlight links inside it based on 
+the visibile sections. Even if any kind of HTML would work,
+you should probably use a list.
 
-
-This project includes a sample component using LitElement with TypeScript.
-
-This template is generated from the `lit-starter-ts` package in [the main Lit
-repo](https://github.com/lit/lit). Issues and PRs for this template should be
-filed in that repo.
+## Features
+- Configurable through [attributes](#attributes)
+- Framework / platform agnostic, use it wherever you like as long as it has a DOM and JS enabled
+- Works with "unusual" Markup structure as seen below
+- Usage of [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for performant DOM observation
 
 ## Usage
+Your markup should resemble something like the following, 
+note the `slot` attribute and how links only contain an ID to the corresponding element you would want to highlight.
 ```html
 <toc-observer>
-  <!-- Slot and its name is mandatory -->
+  <!-- The "toc" slot and its name is mandatory -->
   <ul slot="toc">
     <li>
-      <!-- Links have to begin with a hash ('#') -->
+      <!-- Links must begin with a hash ('#') -->
       <a href="#possums" class="toc-item">Possums</a>
       <ul>
         <li><a href="#diet" class="toc-item">Diet</a></li>
@@ -27,9 +34,31 @@ filed in that repo.
   </ul>
 </toc-observer>
 ```
-### Observing parent elements
+Styling is up to you but you can override the `tocActiveClass` attribute or just style the default which would be something like this:
+```css
+toc-observer a.toc-active {
+  color: var(--toc-color-active);
+  border-left-color: var(--toc-color-active);
+}
 
+/* Not yet supported everywhere but cool: */
+toc-observer a:has(+ ul li > .toc-active) {
+  border-left: 2px solid var(--toc-color-active);
+}
+```
+
+### Observing parent elements
+Most blogs or documentation pages are based on the following markup so that only visible headings are highlighted. However, it can also be interesting to highlight all visible sections instead of just headings - because that is what is currently visible on the screen. In a case like this, where it is not possible to apply IDs to these sections, the following configuration helps.
 ```html
+<toc-observer observeParent>
+  <!-- 
+    ^set parentSelector="my-selector" 
+    if it differs from 'section' 
+  -->
+  
+  <!-- Previous markup -->
+<toc-observer>
+
 <!-- Content -->
 <section>
   <h2 id="characteristics">Characteristics</h2>
@@ -44,10 +73,12 @@ filed in that repo.
   <h3 id="reproduction">Reproduction</h3>
 </section>
 ```
+The idea of using sections or parent elements as a reference of observable items stems from this [post](https://www.bram.us/2020/01/10/smooth-scrolling-sticky-scrollspy-navigation/) by Bramus Van Damme - which I think is what you want from such a component.
+
 ## Attributes
 | Name                   | Required                   | Default       | Description                                           |
 |------------------------|----------------------------|---------------|-------------------------------------------------------|
-| `tocActiveClass`       | No (well kind of)          | `toc-active`  | CSS class which is added to / removed from a TOC link |
+| `tocActiveClass`       | No                         | `toc-active`  | CSS class which is added to / removed from a TOC link |
 | `rootElement`          | No                         | `null`        | The intersection for your TOC items.                  |
 | `observeParent`        | If `parentSelector` is set | `false`       | Useful to watch intersecting wrapper elements         |
 | `parentSelector`       | No                         | `section`     | Specifiy the wrapper element that should be selected  |
@@ -62,7 +93,7 @@ npm i
 
 ## Build
 
-This sample uses the TypeScript compiler to produce JavaScript that runs in modern browsers.
+`<toc-observer>` uses the TypeScript compiler to produce JavaScript that runs in modern browsers.
 
 To build the JavaScript version of your component:
 
@@ -78,31 +109,9 @@ npm run build:watch
 
 Both the TypeScript compiler and lit-analyzer are configured to be very strict. You may want to change `tsconfig.json` to make them less strict.
 
-## Testing
-
-This sample uses modern-web.dev's
-[@web/test-runner](https://www.npmjs.com/package/@web/test-runner) along with
-Mocha, Chai, and some related helpers for testing. See the
-[modern-web.dev testing documentation](https://modern-web.dev/docs/test-runner/overview) for
-more information.
-
-Tests can be run with the `test` script, which will run your tests against Lit's development mode (with more verbose errors) as well as against Lit's production mode:
-
-```bash
-npm test
-```
-
-For local testing during development, the `test:dev:watch` command will run your tests in Lit's development mode (with verbose errors) on every change to your source files:
-
-```bash
-npm test:watch
-```
-
-Alternatively the `test:prod` and `test:prod:watch` commands will run your tests in Lit's production mode.
-
 ## Dev Server
 
-This sample uses modern-web.dev's [@web/dev-server](https://www.npmjs.com/package/@web/dev-server) for previewing the project without additional build steps. Web Dev Server handles resolving Node-style "bare" import specifiers, which aren't supported in browsers. It also automatically transpiles JavaScript and adds polyfills to support older browsers. See [modern-web.dev's Web Dev Server documentation](https://modern-web.dev/docs/dev-server/overview/) for more information.
+`<toc-observer>` uses modern-web.dev's [@web/dev-server](https://www.npmjs.com/package/@web/dev-server) for previewing the project without additional build steps. Web Dev Server handles resolving Node-style "bare" import specifiers, which aren't supported in browsers. It also automatically transpiles JavaScript and adds polyfills to support older browsers. See [modern-web.dev's Web Dev Server documentation](https://modern-web.dev/docs/dev-server/overview/) for more information.
 
 To run the dev server and open the project in a new browser tab:
 
@@ -114,7 +123,7 @@ There is a development HTML file located at `/dev/index.html` that you can view 
 
 ## Editing
 
-If you use VS Code, we highly recommend the [lit-plugin extension](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin), which enables some extremely useful features for lit-html templates:
+If you use VS Code, it is highly recommend the [lit-plugin extension](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin), which enables some extremely useful features for lit-html templates:
 
 - Syntax highlighting
 - Type-checking
@@ -144,38 +153,20 @@ npm run lint
 
 Prettier has not been configured to run when committing files, but this can be added with Husky and and `pretty-quick`. See the [prettier.io](https://prettier.io/) site for instructions.
 
-## Static Site
-
-This project includes a simple website generated with the [eleventy](11ty.dev) static site generator and the templates and pages in `/docs-src`. The site is generated to `/docs` and intended to be checked in so that GitHub pages can serve the site [from `/docs` on the master branch](https://help.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
-
-To enable the site go to the GitHub settings and change the GitHub Pages &quot;Source&quot; setting to &quot;master branch /docs folder&quot;.</p>
-
-To build the site, run:
+To lint the project run:
 
 ```bash
-npm run docs
+npm run format
 ```
-
-To serve the site locally, run:
-
-```bash
-npm run docs:serve
-```
-
-To watch the site files, and re-build automatically, run:
-
-```bash
-npm run docs:watch
-```
-
-The site will usually be served at http://localhost:8000.
 
 ## Bundling and minification
 
-This starter project doesn't include any build-time optimizations like bundling or minification. We recommend publishing components as unoptimized JavaScript modules, and performing build-time optimizations at the application level. This gives build tools the best chance to deduplicate code, remove dead code, and so on.
+This component doesn't include any build-time optimizations like bundling or minification. We recommend publishing components as unoptimized JavaScript modules, and performing build-time optimizations at the application level. This gives build tools the best chance to deduplicate code, remove dead code, and so on.
 
 For information on building application projects that include LitElement components, see [Build for production](https://lit.dev/docs/tools/production/) on the Lit site.
 
-## More information
-
-See [Get started](https://lit.dev/docs/getting-started/) on the Lit site for more information.
+## Useful resources
+- [Get started](https://lit.dev/docs/getting-started/) on the lit.dev site for more information.
+- [Open Web Component scaffold generators](https://open-wc.org/docs/development/generator/) (an alternative for this starter project)
+- [Lit & Friends Slack](https://lit.dev/slack-invite/)
+- [Smooth Scrolling Sticky ScrollSpy Navigation ](https://www.bram.us/2020/01/10/smooth-scrolling-sticky-scrollspy-navigation/) by Bramus Van Damme

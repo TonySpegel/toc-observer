@@ -20,11 +20,7 @@ import {
  * Copyright © 2022 Tony Spegel
  */
 @customElement('toc-observer')
-export class TocObserver extends LitElement {
-  // Converts '_tocList' into a getter that returns the assignedElements of the given slot
-  @queryAssignedElements({slot: 'toc'})
-  private _tocList?: Array<HTMLUListElement>;
-
+export class TocObserver extends LitElement {  
   // CSS class which is set when observer items are visible
   @property({type: String})
   public tocActiveClass = 'toc-active';
@@ -56,7 +52,11 @@ export class TocObserver extends LitElement {
 
   // Should be used together with observeParent
   @property({type: String})
-  public parentSelector = 'section';
+  public parentSelector = 'div';
+
+  // Converts '_tocList' into a getter that returns the assignedElements of the given slot
+  @queryAssignedElements({slot: 'toc'})
+  private _tocList?: Array<HTMLUListElement>;
 
   // anchor-IDs and their corresponding IntersectionObservers
   private anchorHashObserverMap!: Map<

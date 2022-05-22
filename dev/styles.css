@@ -110,10 +110,10 @@ toc-observer a.toc-link {
   padding: calc(var(--base-gap) / 2) var(--base-gap);
   color: var(--toc-color);
 }
-
+/* 
 toc-observer a:has(+ ul li > .toc-active) {
   border-left: 2px solid var(--toc-color-active);
-}
+} */
 
 toc-observer a {
   transition: all 100ms ease-in-out;
@@ -122,6 +122,13 @@ toc-observer a {
 toc-observer a.toc-active {
   color: var(--toc-color-active);
   border-left-color: var(--toc-color-active);
+}
+
+section[id] {
+  background-color: #8a2be21c;
+  padding: 0 var(--base-gap);
+  border-radius: var(--base-gap);
+  margin-bottom: var(--base-gap);
 }
 
 figure {
