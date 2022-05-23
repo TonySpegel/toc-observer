@@ -10,12 +10,22 @@ HTML and tries to highlight links inside it based on
 the visibile sections. Even if any kind of HTML would work,
 you should probably use a list.
 
+![Image of a North American opossum and the toc-observer component](https://user-images.githubusercontent.com/1145514/169901997-17bfeae4-3bee-40d5-90ca-5352bd1949ca.png)
+
+https://user-images.githubusercontent.com/1145514/169903978-c22e081b-4ae0-4de6-9c0e-7929132f81a4.mp4
+
 ## Features
 - Configurable through [attributes](#attributes)
 - Framework / platform agnostic, use it wherever you like as long as it has a DOM and JS enabled
-- Works with "unusual" Markup structure as seen below
+- Works with "unusual" markup structure as seen below
 - Usage of [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for performant DOM observation
 
+## Installation
+If you would like to use this component in your project, you can install it from [npm](https://www.npmjs.com/package/toc-observer-component)
+```bash
+npm i toc-observer-component
+```
+or use it from [UNPKG](https://unpkg.com/)
 ## Usage
 Your markup should resemble something like the following, 
 note the `slot` attribute and how links only contain an ID to the corresponding element you would want to highlight.
@@ -61,7 +71,7 @@ Most blogs or documentation pages are based on the following markup so that only
 
 <!-- Content -->
 <section>
-  <h2 id="characteristics">Characteristics</h2>
+  <h2 id="possums">Possums</h2>
   <p>Opossum are immune to rabies (...)</p>
 </section>
 
@@ -120,7 +130,7 @@ To run the dev server and open the project in a new browser tab:
 npm run serve
 ```
 
-There is a development HTML file located at `/dev/index.html` that you can view at http://localhost:8000/dev/index.html. Note that this command will serve your code using Lit's development mode (with more verbose errors). To serve your code against Lit's production mode, use `npm run serve:prod`.
+There is a development HTML file located at `/dev/index.html` & `/dev/index-headings.html` that you can view at http://localhost:8000/dev/index.html or http://localhost:8000/dev/index-headings.html. Note that this command will serve your code using Lit's development mode (with more verbose errors). To serve your code against Lit's production mode, use `npm run serve:prod`.
 
 ## Editing
 
