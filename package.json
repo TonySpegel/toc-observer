@@ -1,6 +1,6 @@
 {
   "name": "toc-observer-component",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Highlights links in a table of contents when items appear in your viewport.",
   "main": "toc-observer.js",
   "module": "toc-observer.js",
@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "prepublish": "npm run build && npm run create-ce-manifest",
     "clean": "rimraf toc-observer.{d.ts,d.ts.map,js,js.map} test/toc-observer.{d.ts,d.ts.map,js,js.map} test/toc-observer_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
@@ -21,8 +22,8 @@
     "docs:build": "rollup -c --file docs/toc-observer.bundled.js",
     "docs:assets": "cp node_modules/prismjs/themes/prism-okaidia.css docs/",
     "docs:serve": "wds --root-dir=docs --node-resolve --watch",
-    "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
-    "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
+    "create-ce-manifest": "cem analyze --litelement --globs \"src/**/*.ts\"",
+    "create-ce-manifest:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
     "serve:prod": "MODE=prod npm run serve",
     "test": "npm run test:dev && npm run test:prod",
@@ -44,7 +45,7 @@
   "author": "Tony Spegel",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "lit": "^2.2.2"
+    "lit": "^2.4.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
