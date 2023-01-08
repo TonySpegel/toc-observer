@@ -12,19 +12,12 @@ import {
 } from 'lit/decorators.js';
 
 /**
- * <toc-observer> highlights elements in a table of contents
- * if their counterparts are visible in the viewport.
- *
- * @slot toc - place for your table of contents
- *
- * Copyright © 2023 Tony Spegel
- */
-
-/**
  * @summary highlights elements in a table of contents
  * if their counterparts are visible in the viewport.
  *
- * @slot toc - ul/ol with #-links
+ * @slot toc - place for your table of contents, ul/ol with #-links
+ *
+ * Copyright © 2023 Tony Spegel
  */
 @customElement('toc-observer')
 export class TocObserver extends LitElement {
