@@ -15,9 +15,9 @@ import {
  * <toc-observer> highlights elements in a table of contents
  * if their counterparts are visible in the viewport.
  *
- * @slot - This element has a slot
+ * @slot toc - place for your table of contents
  *
- * Copyright © 2022 Tony Spegel
+ * Copyright © 2023 Tony Spegel
  */
 @customElement('toc-observer')
 export class TocObserver extends LitElement {
@@ -31,7 +31,7 @@ export class TocObserver extends LitElement {
 
   // Bounding box which determines when an observation is triggered
   @property({type: String})
-  public rootMargin: string = '0px';
+  public rootMargin = '0px';
 
   /**
    * Useful for observing nested markup like this:
@@ -143,9 +143,9 @@ export class TocObserver extends LitElement {
 
         if (
           this.observeParent === true &&
-          item?.closest(this.parentSelector) !== null
+          item!.closest(this.parentSelector) !== null
         ) {
-          observer.observe(item?.closest(this.parentSelector)!);
+          observer.observe(item!.closest(this.parentSelector)!);
         }
       });
     }

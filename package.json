@@ -1,6 +1,6 @@
 {
   "name": "toc-observer-component",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Highlights links in a table of contents when items appear in your viewport.",
   "main": "toc-observer.js",
   "module": "toc-observer.js",
@@ -30,7 +30,9 @@
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
-    "checksize": "rollup -c ; cat toc-observer.bundled.js | gzip -9 | wc -c ; rm toc-observer.bundled.js"
+    "checksize": "rollup -c ; cat toc-observer.bundled.js | gzip -9 | wc -c ; rm toc-observer.bundled.js",
+    "prepublish": "tsc && npm run create-ce-manifest",
+    "create-ce-manifest": "cem analyze --litelement --globs \"src/**/*.ts\" --exclude \"src/**/*.styles.ts\""
   },
   "keywords": [
     "IntersectionObserver",
@@ -44,7 +46,7 @@
   "author": "Tony Spegel",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "lit": "^2.2.2"
+    "lit": "^2.5.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
@@ -66,15 +68,28 @@
     "@web/test-runner-playwright": "^0.8.4",
     "@webcomponents/webcomponentsjs": "^2.6.0",
     "deepmerge": "^4.2.2",
-    "eslint": "^7.32.0",
-    "lit-analyzer": "^1.1.10",
+    "eslint": "^8.31.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "lit-analyzer": "^1.2.1",
     "mocha": "^9.1.1",
-    "prettier": "^2.3.2",
+    "prettier": "^2.8.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.28.2",
     "rollup-plugin-summary": "^1.2.3",
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.3.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "customElements": "custom-elements.json"
 }
