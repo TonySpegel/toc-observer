@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/toc-observer.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "<toc-observer> highlights elements in a table of contents\nif their counterparts are visible in the viewport.",
+          "name": "TocObserver",
+          "slots": [
+            {
+              "description": "place for your table of contents Copyright © 2023 Tony Spegel",
+              "name": "toc"
+            },
+            {
+              "description": "ul/ol with #-links",
+              "name": "toc"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "tocActiveClass",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'toc-active'",
+              "attribute": "tocActiveClass"
+            },
+            {
+              "kind": "field",
+              "name": "rootElement",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "public",
+              "attribute": "rootElement"
+            },
+            {
+              "kind": "field",
+              "name": "rootMargin",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'0px'",
+              "attribute": "rootMargin"
+            },
+            {
+              "kind": "field",
+              "name": "observeParent",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "public",
+              "default": "false",
+              "description": "Useful for observing nested markup like this:\n<section>\n  <!-- ^observe -->\n  <h2 id=\"possum\">Possum</h2>\n</section>\n\nObserving wrapper elements instead of just headings\nhas the advantage that those have more area to intersect with.\n\n    ┌─────────┐\n    │ #possum │\n  ┌─┼─────────┼─┐\n  │ │         │ │\n  │ └─────────┘ │< Viewport\n  │ ^section    │\n  └─────────────┘",
+              "attribute": "observeParent"
+            },
+            {
+              "kind": "field",
+              "name": "parentSelector",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "public",
+              "default": "'section'",
+              "attribute": "parentSelector"
+            },
+            {
+              "kind": "field",
+              "name": "_tocList",
+              "type": {
+                "text": "Array<HTMLUListElement> | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "anchorHashObserverMap",
+              "type": {
+                "text": "Map<\n    HTMLAnchorElement['hash'],\n    IntersectionObserver\n  >"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectTocLink",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "HTMLAnchorElement | null"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "id",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Selects a TOC link within the components slot / ul element.\nIts id param is obtained by reading the oberver item's target-id."
+            },
+            {
+              "kind": "field",
+              "name": "_tocListItems",
+              "type": {
+                "text": "HTMLAnchorElement[] | null"
+              },
+              "privacy": "private",
+              "description": "Receive any items within '_tocList' if present or null"
+            },
+            {
+              "kind": "method",
+              "name": "createIdObserverMap",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Map<HTMLAnchorElement['hash'], IntersectionObserver>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "anchors",
+                  "type": {
+                    "text": "HTMLAnchorElement[]"
+                  }
+                }
+              ],
+              "description": "Creates a map of anchor-IDs and their corresponding\nIntersectionObservers. Anchor-IDs are used to select\ntoc-links within '_tocList' and also to create observer\nitems later.\n\n{\"#beschreibung\" => IntersectionObserver}\n{\"#lebensweise\" => IntersectionObserver}"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "tocActiveClass",
+              "type": {
+                "text": "string"
+              },
+              "default": "'toc-active'",
+              "fieldName": "tocActiveClass"
+            },
+            {
+              "name": "rootElement",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "rootElement"
+            },
+            {
+              "name": "rootMargin",
+              "type": {
+                "text": "string"
+              },
+              "default": "'0px'",
+              "fieldName": "rootMargin"
+            },
+            {
+              "name": "observeParent",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Useful for observing nested markup like this:\n<section>\n  <!-- ^observe -->\n  <h2 id=\"possum\">Possum</h2>\n</section>\n\nObserving wrapper elements instead of just headings\nhas the advantage that those have more area to intersect with.\n\n    ┌─────────┐\n    │ #possum │\n  ┌─┼─────────┼─┐\n  │ │         │ │\n  │ └─────────┘ │< Viewport\n  │ ^section    │\n  └─────────────┘",
+              "fieldName": "observeParent"
+            },
+            {
+              "name": "parentSelector",
+              "type": {
+                "text": "string"
+              },
+              "default": "'section'",
+              "fieldName": "parentSelector"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "summary": "highlights elements in a table of contents\nif their counterparts are visible in the viewport.",
+          "tagName": "toc-observer",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TocObserver",
+          "declaration": {
+            "name": "TocObserver",
+            "module": "src/toc-observer.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "toc-observer",
+          "declaration": {
+            "name": "TocObserver",
+            "module": "src/toc-observer.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/toc-observer_test.ts",
+      "declarations": [],
+      "exports": []
+    }
+  ]
+}

@@ -19,6 +19,13 @@ import {
  *
  * Copyright © 2023 Tony Spegel
  */
+
+/**
+ * @summary highlights elements in a table of contents
+ * if their counterparts are visible in the viewport.
+ *
+ * @slot toc - ul/ol with #-links
+ */
 @customElement('toc-observer')
 export class TocObserver extends LitElement {
   // CSS class which is set when observer items are visible

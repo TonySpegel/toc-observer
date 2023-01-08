@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "prepublish": "npm run build && npm run create-ce-manifest",
     "clean": "rimraf toc-observer.{d.ts,d.ts.map,js,js.map} test/toc-observer.{d.ts,d.ts.map,js,js.map} test/toc-observer_test.{d.ts,d.ts.map,js,js.map}",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
@@ -21,8 +22,8 @@
     "docs:build": "rollup -c --file docs/toc-observer.bundled.js",
     "docs:assets": "cp node_modules/prismjs/themes/prism-okaidia.css docs/",
     "docs:serve": "wds --root-dir=docs --node-resolve --watch",
-    "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
-    "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
+    "create-ce-manifest": "cem analyze --litelement --globs \"src/**/*.ts\" --exclude \"src/**/*.styles.ts\"",
+    "create-ce-manifest:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
     "serve": "wds --watch",
     "serve:prod": "MODE=prod npm run serve",
     "test": "npm run test:dev && npm run test:prod",
@@ -30,9 +31,7 @@
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
-    "checksize": "rollup -c ; cat toc-observer.bundled.js | gzip -9 | wc -c ; rm toc-observer.bundled.js",
-    "prepublish": "tsc && npm run create-ce-manifest",
-    "create-ce-manifest": "cem analyze --litelement --globs \"src/**/*.ts\" --exclude \"src/**/*.styles.ts\""
+    "checksize": "rollup -c ; cat toc-observer.bundled.js | gzip -9 | wc -c ; rm toc-observer.bundled.js"
   },
   "keywords": [
     "IntersectionObserver",
@@ -51,15 +50,15 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
-    "@custom-elements-manifest/analyzer": "^0.5.7",
+    "@custom-elements-manifest/analyzer": "^0.6.6",
     "@esm-bundle/chai": "^4.1.5",
     "@open-wc/testing": "^3.0.0-next.1",
     "@open-wc/testing-karma": "^4.0.9",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-replace": "^3.0.0",
     "@types/mocha": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.3.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
     "@web/dev-server": "^0.1.22",
     "@web/dev-server-legacy": "^0.1.4",
     "@web/dev-server-rollup": "^0.3.9",
